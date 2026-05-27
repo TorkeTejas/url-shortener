@@ -1,0 +1,183 @@
+# 📄 What is `requirements.txt`?
+
+Think of it like a **shopping list** for your project.
+
+When you build your URL shortener, you'll use libraries that other people built — like FastAPI, qrcode, etc. These libraries need to be **installed** before your app can run.
+
+`requirements.txt` is just a plain text file that lists all those libraries. That's it.
+
+```
+fastapi
+uvicorn
+google-cloud-firestore
+google-cloud-storage
+qrcode[pil]
+pydantic
+```
+
+---
+
+## 🤔 Why Do You Need It?
+
+Imagine these 3 situations:
+
+### Situation 1 — You switch computers
+You built your app on your laptop. Now you want to run it on another machine. Instead of remembering every library you installed, you just run:
+
+```bash
+pip install -r requirements.txt
+```
+
+Done. All libraries installed in one command.
+
+### Situation 2 — You deploy to GCP
+When Docker builds your container for GCP, it starts from a completely fresh Python installation — nothing is installed. It reads your `requirements.txt` and installs everything your app needs.
+
+### Situation 3 — Someone else uses your code
+Your friend clones your GitHub repo. They just run:
+
+```bash
+pip install -r requirements.txt
+```
+
+And their machine has exactly what yours has.
+
+---
+
+## ✍️ How to Create It
+
+### Option 1 — Write it manually *(recommended for beginners)*
+
+Just create a file called `requirements.txt` in your project folder and type the library names:
+
+```
+fastapi
+uvicorn
+google-cloud-firestore
+google-cloud-storage
+qrcode[pil]
+pydantic
+```
+
+### Option 2 — Auto-generate it
+
+After installing libraries with pip, run:
+
+```bash
+pip freeze > requirements.txt
+```
+
+This automatically writes every installed library into the file. Open it and you'll see something like:
+
+```
+fastapi==0.111.0
+uvicorn==0.29.0
+pydantic==2.7.1
+qrcode==7.4.2
+```
+
+The `==` means "exactly this version". This is good because it makes sure everyone uses the same version.
+
+---
+
+## 📌 With Versions vs Without Versions
+
+```
+# Without versions (flexible — installs latest)
+fastapi
+uvicorn
+
+# With versions (locked — installs exact version)
+fastapi==0.111.0
+uvicorn==0.29.0
+```
+
+> **For beginners** — use without versions while learning. Add versions later when your app is ready to deploy, so nothing unexpectedly breaks.
+
+---
+
+## 🔁 The Full Workflow You'll Follow
+
+```bash
+# Step 1 — activate your virtual environment
+source venv/bin/activate
+
+# Step 2 — install a library you need
+pip install fastapi
+
+# Step 3 — update your requirements.txt
+pip freeze > requirements.txt
+
+# Step 4 — commit it to GitHub
+git add requirements.txt
+git commit -m "added fastapi to requirements"
+git push
+```
+
+> Every time you install a new library → update `requirements.txt` → commit to GitHub. Make this a habit.
+
+---
+
+## 🗂️ Where It Lives in Your Project
+
+```
+url-shortener/
+├── main.py              ← your app code
+├── requirements.txt     ← your shopping list ✅
+├── Dockerfile           ← uses requirements.txt to build container
+└── venv/                ← your virtual environment (never commit this)
+```
+
+---
+
+## ⚠️ One Important Rule
+
+**Never commit your `venv` folder to GitHub.** It's huge (thousands of files) and unnecessary — anyone can recreate it from `requirements.txt`.
+
+Tell git to ignore it by creating a `.gitignore` file:
+
+```bash
+# Create .gitignore file
+echo "venv/" >> .gitignore
+echo "__pycache__/" >> .gitignore
+git add .gitignore
+git commit -m "added gitignore"
+git push
+```
+
+Now git will never touch the `venv` folder.
+
+---
+
+## ✅ Your `requirements.txt` for This Project
+
+Here's the exact file you'll use for the URL shortener:
+
+```
+fastapi
+uvicorn
+google-cloud-firestore
+google-cloud-storage
+qrcode[pil]
+pydantic
+```
+
+Save this file in your Codespace and run:
+
+```bash
+pip install -r requirements.txt
+```
+
+You'll see all 6 libraries install automatically. That's the power of `requirements.txt`. 🎉
+
+---
+
+## 🧠 Quick Summary
+
+| Term | What it means |
+|---|---|
+| `requirements.txt` | Shopping list of libraries your project needs |
+| `pip install -r requirements.txt` | Install everything on the list |
+| `pip freeze > requirements.txt` | Auto-generate the list from what's installed |
+| `==` | Locks to an exact version of a library |
+| `.gitignore` | Tells git to ignore files like `venv/` |
