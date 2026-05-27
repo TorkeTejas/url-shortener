@@ -1,4 +1,4 @@
-#!/workspaces/url-shortener/venv/bin/python
+#!/workspaces/url-shortener/.venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
